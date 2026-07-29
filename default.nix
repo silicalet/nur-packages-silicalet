@@ -7,7 +7,9 @@
 # commands such as:
 #     nix-build -A mypackage
 
-{ pkgs ? import <nixpkgs> { } }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 {
   # The `lib`, `overlays`, `nixosModules`, `homeModules`,
@@ -19,7 +21,13 @@
   # flakeModules = { }; # flake-parts modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  example-package = pkgs.callPackage ./pkgs/example-package { };
-  # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
-  # ...
+  amber-lsp = pkgs.callPackage ./pkgs/amber-lsp { };
+  cangjie = pkgs.callPackage ./pkgs/cangjie { };
+  code996 = pkgs.callPackage ./pkgs/code996 { };
+  dnspick = pkgs.callPackage ./pkgs/dnspick { };
+  ghost-downloader-3 = pkgs.callPackage ./pkgs/ghost-downloader-3 { };
+  ipgw = pkgs.callPackage ./pkgs/ipgw { };
+  meatshell = pkgs.callPackage ./pkgs/meatshell { };
+  quien = pkgs.callPackage ./pkgs/quien { };
+  uipro-cli = pkgs.callPackage ./pkgs/uipro-cli { };
 }
