@@ -68,6 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libayatana-appindicator ]}"
+    )
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
