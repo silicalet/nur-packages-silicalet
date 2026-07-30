@@ -8,11 +8,11 @@
   glib-networking,
   libayatana-appindicator,
   nix-update-script,
-  nodejs_22,
+  nodejs,
   openssl,
   pkg-config,
   pnpmConfigHook,
-  pnpm_9,
+  pnpm,
   rustPlatform,
   udev,
   webkitgtk_4_1,
@@ -38,17 +38,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm;
     fetcherVersion = 3;
     hash = "sha256-Q0KY2ie8Gbc0WJuLigWo4r+0RTKwIveqcTRWR+ze5Mg=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    nodejs_22
+    nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm
     wrapGAppsHook3
   ];
 
