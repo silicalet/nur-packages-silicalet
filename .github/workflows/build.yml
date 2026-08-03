@@ -48,14 +48,12 @@ jobs:
       matrix:
         package:
           - amber-lsp
-          - cangjie
           - code996
           - dnspick
           - ghost-downloader-3
           - ipgw
-          - meatshell
-          - nyaterm
           - quien
+          - seekey
           - uipro-cli
 
     steps:
