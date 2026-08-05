@@ -7,16 +7,22 @@ pure and reproducible.
 
 ## Update packages
 
-Update every package that follows a standard upstream tag:
-
-```console
-nix run .#update
-```
-
 Update selected packages:
 
 ```console
 nix run .#update -- amber-lsp quien
+```
+
+Update every package that follows a standard upstream tag:
+
+```console
+nix run .#update -- --all
+```
+
+Running without a package only shows the usage and available package names:
+
+```console
+nix run .#update
 ```
 
 Show the default update set without changing anything:
