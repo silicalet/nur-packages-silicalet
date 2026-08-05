@@ -6,8 +6,8 @@ let default_packages = [
     "dnspick",
     "ghost-downloader-3",
     "ipgw",
-    "meatshell",
-    "nyaterm",
+    "meatshell-x86_64-bin",
+    "nyaterm-x86_64-bin",
     "quien",
     "uipro-cli",
 ]
@@ -57,6 +57,6 @@ main (args) {
 
     for package in packages {
         echo("==> Updating {package}")
-        $ nix-update {package} --flake --build --format $?
+        $ nix-update {package} --flake --build --format --use-github-releases $?
     }
 }
