@@ -39,14 +39,16 @@ jobs:
         shell: bash
 
     steps:
-      # nixos/nix has no git; checkout and the later commit/push need it.
+      # nixos/nix cannot run actions/checkout (no host Node interpreter).
       - name: Install git and GitHub CLI
         run: nix-env -iA nixpkgs.git nixpkgs.gh
 
       - name: Checkout default branch
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ env.UPDATE_BRANCH }}
+        run: |
+          git clone --depth 1 --branch "$UPDATE_BRANCH" \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Update regular and x86_64 binary packages
         run: nix run .#update -- --all
