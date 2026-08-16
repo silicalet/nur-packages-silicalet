@@ -14,23 +14,27 @@ concurrency:
   group: nur-build-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  NIX_CONFIG: |
+    experimental-features = nix-command flakes
+    access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    extra-substituters = https://cache.mr-why.cn/nur https://cache.mr-why.cn/nur-pr
+    extra-trusted-public-keys = nur:aQlY5sfibsfPJgLVG4yMCrJLB4+RJ1vaebK4sWl74K4= nur-pr:jUrGaS3si2esbX9X2BvhP7mpx2Wyf3Fy3SCC+JQ7E58=
+    sandbox = false
+    filter-syscalls = false
+
 jobs:
   evaluate:
     name: Evaluate flake
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    container: nixos/nix:2.35.2
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            extra-substituters = https://cache.mr-why.cn/nur https://cache.mr-why.cn/nur-pr
-            extra-trusted-public-keys = nur:aQlY5sfibsfPJgLVG4yMCrJLB4+RJ1vaebK4sWl74K4= nur-pr:jUrGaS3si2esbX9X2BvhP7mpx2Wyf3Fy3SCC+JQ7E58=
 
       - name: Check package inventory
         run: |
@@ -44,6 +48,13 @@ jobs:
     needs: evaluate
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 330
+    container:
+      image: nixos/nix:2.35.2
+      # AppImage wrapType2 / buildFHSEnv need user namespaces for bwrap.
+      options: --privileged
+    defaults:
+      run:
+        shell: bash
     strategy:
       fail-fast: false
       max-parallel: 10
@@ -68,15 +79,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            extra-substituters = https://cache.mr-why.cn/nur https://cache.mr-why.cn/nur-pr
-            extra-trusted-public-keys = nur:aQlY5sfibsfPJgLVG4yMCrJLB4+RJ1vaebK4sWl74K4= nur-pr:jUrGaS3si2esbX9X2BvhP7mpx2Wyf3Fy3SCC+JQ7E58=
 
       - name: Build package
         run: >-
