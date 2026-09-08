@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dnspick";
-  version = "2.2.6";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "palemoky";
     repo = "dnspick";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fl+fIHRHJj63DDoVVQe/NTuxTg2nfXCYRAjjnHF9jng=";
+    hash = "sha256-Rv2e7oQMul2Ew8ELLRlF06tokYc/gRKJ7DqC4lok/p0=";
   };
 
-  vendorHash = "sha256-8m64ENTOcVYxiudzzS2Cwi8vDrpJ0JZU9ZgovQEAHIQ=";
+  vendorHash = "sha256-dIgeYos0Z9KavqwVyhN9q62WnPPOdEqdz70FuwbznUQ=";
 
   ldflags =
     let
