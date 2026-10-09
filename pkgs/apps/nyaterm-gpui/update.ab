@@ -11,7 +11,7 @@ main (args) {
         exit(1)
     }
 
-    const package = "nyaterm-bin"
+    const package = "nyaterm-gpui-bin"
     const github_repo = "nyakang/nyaterm"
     const repo_root = $ git rev-parse --show-toplevel $?
     const release_file = $ mktemp $?
@@ -20,20 +20,26 @@ main (args) {
     if github_token == "" {
         $ curl --fail --silent --show-error --location \
             --retry 5 --retry-all-errors --retry-delay 2 \
-            "https://api.github.com/repos/{github_repo}/releases/latest" \
+            "https://api.github.com/repos/{github_repo}/releases?per_page=30" \
             --output {release_file} $?
     } else {
         $ curl --fail --silent --show-error --location \
             --retry 5 --retry-all-errors --retry-delay 2 \
             --header "Authorization: Bearer {github_token}" \
-            "https://api.github.com/repos/{github_repo}/releases/latest" \
+            "https://api.github.com/repos/{github_repo}/releases?per_page=30" \
             --output {release_file} $?
     }
 
-    const version = $ jq -er '.tag_name | sub("^v"; "")' {release_file} $?
-    $ printf '%s\n' {version} | grep -Eq '^[0-9][0-9A-Za-z._+-]*\$' $
+    const filter_dir = $ mktemp -d $?
+    const version_filter = "{filter_dir}/version.jq"
+    const asset_filter = "{filter_dir}/asset.jq"
+    $ cp {repo_root}/pkgs/apps/nyaterm-gpui/version.jq {version_filter} $?
+    $ cp {repo_root}/pkgs/apps/nyaterm-gpui/asset.jq {asset_filter} $?
+
+    const version = $ jq -erf {version_filter} {release_file} $?
+    $ printf '%s\n' {version} | grep -Eq '^2\.0\.0-preview\.[0-9]+\$' $
     failed {
-        echo("error: invalid release version: {version}")
+        echo("error: invalid GPUI preview version: {version}")
         exit(1)
     }
 
@@ -42,12 +48,13 @@ main (args) {
         asset = "NyaTerm_{version}_linux_arm64.AppImage"
     }
 
-    const url = $ jq -er --arg asset {asset} \
-        '.assets[] | select(.name == \$asset) | .browser_download_url' \
-        {release_file} $?
-    const digest = $ jq -r --arg asset {asset} \
-        '.assets[] | select(.name == \$asset) | .digest // empty' \
-        {release_file} $?
+    const url = $ jq -er --arg version {version} --arg asset {asset} \
+        -f {asset_filter} \
+        {release_file} | jq -er '.browser_download_url' $?
+    const digest = $ jq -r --arg version {version} --arg asset {asset} \
+        -f {asset_filter} \
+        {release_file} | jq -r '.digest // empty' $?
+    $ rm -rf {filter_dir} $?
     let hash = ""
 
     if digest != "" {
@@ -57,7 +64,7 @@ main (args) {
         hash = $ nix store prefetch-file --json {url} | jq -er '.hash' $?
     }
 
-    const source_file = "{repo_root}/pkgs/nyaterm/sources/{system}.nix"
+    const source_file = "{repo_root}/pkgs/apps/nyaterm-gpui/sources/{system}.nix"
     $ sed -i \
         -e 's|^  version = ".*";|  version = "{version}";|' \
         -e 's|^  hash = ".*";|  hash = "{hash}";|' \

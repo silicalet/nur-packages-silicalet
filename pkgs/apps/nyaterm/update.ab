@@ -6,13 +6,13 @@ main (args) {
         system = args[1]
     }
 
-    if system != "x86_64-linux" {
+    if system != "x86_64-linux" and system != "aarch64-linux" {
         echo("error: unsupported architecture: {system}")
         exit(1)
     }
 
-    const package = "folia-major-bin"
-    const github_repo = "chthollyphile/folia-major"
+    const package = "nyaterm-bin"
+    const github_repo = "nyakang/nyaterm"
     const repo_root = $ git rev-parse --show-toplevel $?
     const release_file = $ mktemp $?
     const github_token = env_var_load("GITHUB_TOKEN", "/dev/null")
@@ -37,7 +37,11 @@ main (args) {
         exit(1)
     }
 
-    const asset = "folia-major-{version}-linux-x64.tar.gz"
+    let asset = "NyaTerm_{version}_linux_x64.AppImage"
+    if system == "aarch64-linux" {
+        asset = "NyaTerm_{version}_linux_arm64.AppImage"
+    }
+
     const url = $ jq -er --arg asset {asset} \
         '.assets[] | select(.name == \$asset) | .browser_download_url' \
         {release_file} $?
@@ -48,12 +52,12 @@ main (args) {
 
     if digest != "" {
         const digest_hex = $ printf '%s\n' {digest} | sed 's/^sha256://' $?
-        hash = $ nix hash to-sri --type sha256 {digest_hex} $?
+        hash = $ nix hash convert --hash-algo sha256 --to sri {digest_hex} $?
     } else {
         hash = $ nix store prefetch-file --json {url} | jq -er '.hash' $?
     }
 
-    const source_file = "{repo_root}/pkgs/folia-major/sources/{system}.nix"
+    const source_file = "{repo_root}/pkgs/apps/nyaterm/sources/{system}.nix"
     $ sed -i \
         -e 's|^  version = ".*";|  version = "{version}";|' \
         -e 's|^  hash = ".*";|  hash = "{hash}";|' \
