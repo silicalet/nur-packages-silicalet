@@ -193,21 +193,6 @@ Both architectures are included in CI and automatic updates. Update with
 `nix run .#update -- qrypt-bin` (or add `--arch aarch64-linux`). Manage installed
 versions through Nix rather than the upstream `upgrade`/`uninstall` commands.
 
-## ModelTrace
-
-Run the local model-attribution web application:
-
-```console
-nix run .#modeltrace
-```
-
-The application opens `http://127.0.0.1:7860/` and listens only on loopback.
-Writable fingerprint banks are stored in `$XDG_DATA_HOME/modeltrace`, falling
-back to `$HOME/.local/share/modeltrace`. Bundled data seeds missing files;
-existing banks and custom data are not overwritten on restart or upgrade.
-ModelTrace has no upstream release tags, so its updater follows the default
-branch and pins the resulting commit and source hash.
-
 ## ArtCraft creative suite
 
 `craft-suite-bin` installs all thirteen Craft applications and ArtCraft Launcher

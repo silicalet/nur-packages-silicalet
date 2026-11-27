@@ -52,7 +52,6 @@ in
   kuake-cli = pkgs.callPackage ./pkgs/tools/kuake-cli { };
   meatshell = pkgs.callPackage ./pkgs/apps/meatshell { };
   meatshell-bin = pkgs.callPackage ./pkgs/apps/meatshell/binary.nix { };
-  modeltrace = pkgs.callPackage ./pkgs/apps/modeltrace { };
   neomacs-bin = pkgs.callPackage ./pkgs/apps/neomacs/binary.nix { };
   neu-cli = pkgs.callPackage ./pkgs/tools/neu-cli { };
   nodecode-bin = pkgs.callPackage ./pkgs/tools/nodecode/binary.nix { };

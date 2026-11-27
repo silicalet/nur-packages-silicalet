@@ -35,7 +35,6 @@ REPO_ROOT = Path(os.environ.get("NUR_PACKAGES_ROOT") or Path.cwd()).resolve()
 
 NIX_UPDATE_ARGS = {
     "neu-cli": ["--version=branch"],
-    "modeltrace": ["--version=branch"],
     "quarkpan": ["--version=branch"],
     "rea": ["--format", "--use-github-releases", "--version-regex", "rea-agents-(.*)"],
 }
@@ -123,7 +122,6 @@ DEFAULT_PACKAGES = [
     "ipgw",
     "kuake-cli",
     "meatshell-bin",
-    "modeltrace",
     "neomacs-bin",
     "neu-cli",
     "nodecode-bin",

@@ -80,7 +80,6 @@ jobs:
           - { package: ipgw, system: x86_64-linux, runner: ubuntu-latest }
           - { package: kuake-cli, system: x86_64-linux, runner: ubuntu-latest }
           - { package: meatshell-bin, system: x86_64-linux, runner: ubuntu-latest }
-          - { package: modeltrace, system: x86_64-linux, runner: ubuntu-latest }
           - { package: neomacs-bin, system: x86_64-linux, runner: ubuntu-latest }
           - { package: neu-cli, system: x86_64-linux, runner: ubuntu-latest }
           - { package: nodecode-bin, system: x86_64-linux, runner: ubuntu-latest }
