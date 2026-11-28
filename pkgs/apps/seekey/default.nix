@@ -8,6 +8,7 @@
   gtk4-layer-shell,
   json-glib,
   libevdev,
+  libinput,
   ncurses,
   nix-update-script,
   pkg-config,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seekey";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Nakanomk";
     repo = "Seekey";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ln/77IRcppWf3yCaKBkbt0P1BeKf0ZwFRyqcIKD+ZfQ=";
+    hash = "sha256-8D9N9gTPt8I+u4gr/acsBqT6jHHhAiVxxT2B65i6sbI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4-layer-shell
     json-glib
     libevdev
+    libinput
     ncurses
   ];
 
