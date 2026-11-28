@@ -49,6 +49,10 @@ in
       pname = "neu-cli";
       inherit version src;
 
+      postPatch = ''
+        sed -E -i 's/ && <[0-9.]+//g' neu.cabal
+      '';
+
       isLibrary = true;
       isExecutable = true;
 

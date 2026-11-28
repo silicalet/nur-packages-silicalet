@@ -138,8 +138,8 @@ nix run .#neu-cli -- webvpn ipgw.neu.edu.cn
 
 The package runs the upstream Haskell tests during the build and includes
 `xdg-open` for `webvpn --open`.
-It uses unmodified upstream source with a package-local `http-types 0.12.6`
-dependency, matching the upstream Cabal build.
+The build removes dependency upper bounds from `neu.cabal` while keeping the
+minimum versions. It uses a package-local `http-types 0.12.6` to match upstream.
 Commands that access campus services require the
 appropriate network access and, where applicable, your own account.
 Upstream has no release tags, so the package pins a commit and its updater
